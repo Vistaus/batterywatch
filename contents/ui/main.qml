@@ -369,7 +369,7 @@ PlasmoidItem {
                             
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 2
+                                spacing: Kirigami.Units.smallSpacing
                                 
                                 PlasmaComponents.Label {
                                     text: modelData.name || "Unknown Device"
@@ -387,7 +387,6 @@ PlasmoidItem {
                                 Layout.fillWidth: true
                             }
                             
-                            // Progress bar (default state)
                             PlasmaComponents.ProgressBar {
                                 Layout.preferredWidth: Kirigami.Units.gridUnit * 6
                                 visible: !parent.parent.isHovered
@@ -396,7 +395,6 @@ PlasmoidItem {
                                 value: modelData.percentage
                             }
                             
-                            // Buttons (on hover)
                             RowLayout {
                                 spacing: Kirigami.Units.smallSpacing
                                 visible: parent.parent.isHovered
@@ -406,18 +404,6 @@ PlasmoidItem {
                                     text: hiddenDevices.indexOf(modelData.serial) === -1 ? "Hide" : "Show"
                                     display: PlasmaComponents.AbstractButton.IconOnly
                                     onClicked: toggleDeviceVisibility(modelData.serial)
-                                    
-                                    MouseArea {
-                                        id: hideTooltipArea
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        propagateComposedEvents: true
-                                        onPressed: mouse.accepted = false
-                                        
-                                        PlasmaComponents.ToolTip {
-                                            text: hiddenDevices.indexOf(modelData.serial) === -1 ? "Hide from tray" : "Show in tray"
-                                        }
-                                    }
                                 }
                                 
                                 PlasmaComponents.ToolButton {
@@ -425,18 +411,6 @@ PlasmoidItem {
                                     text: "Disconnect"
                                     display: PlasmaComponents.AbstractButton.IconOnly
                                     onClicked: disconnectDevice(modelData.serial)
-                                    
-                                    MouseArea {
-                                        id: disconnectTooltipArea
-                                        anchors.fill: parent
-                                        hoverEnabled: true
-                                        propagateComposedEvents: true
-                                        onPressed: mouse.accepted = false
-                                        
-                                        PlasmaComponents.ToolTip {
-                                            text: "Disconnect device"
-                                        }
-                                    }
                                 }
                             }
                             
