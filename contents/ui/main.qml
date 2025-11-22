@@ -354,8 +354,6 @@ PlasmoidItem {
                         Layout.fillWidth: true
                         Layout.preferredHeight: deviceRow.implicitHeight
                         
-                        property bool isHovered: false
-                        
                         FlexboxLayout {
                             id: deviceRow
                             anchors.fill: parent
@@ -395,24 +393,21 @@ PlasmoidItem {
                                 Layout.fillHeight: true
                                 justifyContent: FlexboxLayout.JustifyEnd
                                 alignItems: FlexboxLayout.AlignCenter
-                                gap: 15
-
-                                PlasmaComponents.ProgressBar {
-                                    Layout.preferredWidth: Kirigami.Units.gridUnit * 6
-                                    visible: !parent.parent.parent.isHovered
-                                    from: 0
-                                    to: 100
-                                    value: modelData.percentage
-                                }
+                                gap: Kirigami.Units.largeSpacing
                                 
                                 RowLayout {
-                                    visible: parent.parent.parent.isHovered
                                     
                                     PlasmaComponents.ToolButton {
                                         icon.name: hiddenDevices.indexOf(modelData.serial) === -1 ? "view-visible" : "view-hidden"
                                         text: hiddenDevices.indexOf(modelData.serial) === -1 ? "Hide" : "Show"
                                         display: PlasmaComponents.AbstractButton.IconOnly
                                         onClicked: toggleDeviceVisibility(modelData.serial)
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onPressed: mouse.accepted = false
+                                        }
                                     }
                                     
                                     PlasmaComponents.ToolButton {
@@ -420,6 +415,12 @@ PlasmoidItem {
                                         text: "Disconnect"
                                         display: PlasmaComponents.AbstractButton.IconOnly
                                         onClicked: disconnectDevice(modelData.serial)
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onPressed: mouse.accepted = false
+                                        }
                                     }
                                 }
                                 
@@ -428,18 +429,6 @@ PlasmoidItem {
                                     font.bold: true
                                 }
                             }
-                        }
-                        
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
-                            
-                            onEntered: parent.isHovered = true
-                            onExited: parent.isHovered = false
-                            
-                            // Pass clicks through to buttons
-                            onPressed: mouse.accepted = false
                         }
                     }
                     
