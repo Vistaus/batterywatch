@@ -1,0 +1,18 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "itay.avra@gmail.com"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "Display battery percentage of connected Bluetooth devices in the system tray",
+        "Icon": "battery-profile-performance",
+        "Id": "com.github.itayavra.btbattery",
+        "Name": "Bluetooth Battery Monitor",
+        "Version": "1.0",
+        "Website": "https://github.com/itayavra/btbattery"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
