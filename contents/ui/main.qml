@@ -259,9 +259,9 @@ PlasmoidItem {
     fullRepresentation: Item {
         Layout.minimumWidth: Kirigami.Units.gridUnit * 25
         Layout.preferredWidth: Kirigami.Units.gridUnit * 30
-        Layout.minimumHeight: Kirigami.Units.gridUnit * 8
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 16
-        Layout.maximumHeight: Kirigami.Units.gridUnit * 16
+        Layout.minimumHeight: Kirigami.Units.gridUnit * 12
+        Layout.preferredHeight: Kirigami.Units.gridUnit * 17
+        Layout.maximumHeight: Kirigami.Units.gridUnit * 17
         
         ColumnLayout {
             anchors.fill: parent
