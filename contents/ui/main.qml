@@ -10,7 +10,7 @@ import org.kde.config as KConfig
 PlasmoidItem {
     id: root
     
-    property var bluetoothDevices: []
+    property var connectedDevices: []
     property var hiddenDevices: [] // List of MAC addresses to hide
     
     // Connection type enum
@@ -28,14 +28,14 @@ PlasmoidItem {
     preferredRepresentation: compactRepresentation
     
     // Tooltip properties
-    toolTipMainText: "Bluetooth Battery Monitor"
+    toolTipMainText: "Device Battery Monitor"
     toolTipSubText: "No devices"
     
     // Hide widget when no visible devices
     Plasmoid.status: {
         var visibleCount = 0
-        for (var i = 0; i < bluetoothDevices.length; i++) {
-            if (hiddenDevices.indexOf(bluetoothDevices[i].serial) === -1) {
+        for (var i = 0; i < connectedDevices.length; i++) {
+            if (hiddenDevices.indexOf(connectedDevices[i].serial) === -1) {
                 visibleCount++
             }
         }
@@ -43,12 +43,12 @@ PlasmoidItem {
     }
     
     function updateTooltip() {
-        if (bluetoothDevices.length === 0) {
-            toolTipSubText = "No Bluetooth devices"
+        if (connectedDevices.length === 0) {
+            toolTipSubText = "No connected devices"
         } else {
             var lines = []
-            for (var i = 0; i < bluetoothDevices.length; i++) {
-                var device = bluetoothDevices[i]
+            for (var i = 0; i < connectedDevices.length; i++) {
+                var device = connectedDevices[i]
                 if (hiddenDevices.indexOf(device.serial) === -1) {
                     var displayName = device.name
                     if (device.serial) {
@@ -87,7 +87,7 @@ PlasmoidItem {
         Plasmoid.status = Plasmoid.status // Force status update
     }
     
-    function disconnectDevice(serial) {
+    function disconnectBluetoothDevice(serial) {
         // Disconnect via bluetoothctl
         bluetoothCtlSource.connectSource("bluetoothctl disconnect " + serial)
     }
@@ -122,7 +122,7 @@ PlasmoidItem {
             
             // If no devices, clear the list immediately
             if (deviceCheckCount === 0) {
-                bluetoothDevices = []
+                connectedDevices = []
                 updateTooltip()
                 return
             }
@@ -173,7 +173,7 @@ PlasmoidItem {
                     }
                     return a.serial.localeCompare(b.serial)
                 })
-                bluetoothDevices = pendingDevices.slice()
+                connectedDevices = pendingDevices.slice()
                 updateTooltip()
                 pendingDevices = []
                 processedCount = 0
@@ -232,7 +232,7 @@ PlasmoidItem {
             spacing: Kirigami.Units.smallSpacing
             
             Repeater {
-                model: bluetoothDevices
+                model: connectedDevices
                 
                 RowLayout {
                     visible: hiddenDevices.indexOf(modelData.serial) === -1
@@ -277,7 +277,7 @@ PlasmoidItem {
                 spacing: Kirigami.Units.smallSpacing
                 
                 PlasmaComponents.Label {
-                    text: "Bluetooth Device Batteries"
+                    text: "Connected Device Batteries"
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.2
                     Layout.fillWidth: true
@@ -315,7 +315,7 @@ PlasmoidItem {
                     spacing: 0
                     
                     Repeater {
-                        model: bluetoothDevices
+                        model: connectedDevices
                         
                         ColumnLayout {
                             Layout.fillWidth: true
@@ -367,7 +367,7 @@ PlasmoidItem {
                                             icon.name: "network-disconnect"
                                             text: "Disconnect"
                                             display: PlasmaComponents.AbstractButton.IconOnly
-                                            onClicked: disconnectDevice(modelData.serial)
+                                            onClicked: disconnectBluetoothDevice(modelData.serial)
                                             
                                             PlasmaComponents.ToolTip {
                                                 text: "Disconnect device"
@@ -411,14 +411,14 @@ PlasmoidItem {
                             
                             Kirigami.Separator {
                                 Layout.fillWidth: true
-                                visible: index < bluetoothDevices.length - 1
+                                visible: index < connectedDevices.length - 1
                             }
                         }
                     }
                     
                     PlasmaComponents.Label {
-                        visible: bluetoothDevices.length === 0
-                        text: "No Bluetooth devices with battery info found"
+                        visible: connectedDevices.length === 0
+                        text: "No connected devices with battery info found"
                         Layout.fillWidth: true
                         Layout.topMargin: Kirigami.Units.largeSpacing
                         horizontalAlignment: Text.AlignHCenter
