@@ -24,6 +24,8 @@ PlasmoidItem {
     }
     
     property bool hasVisibleDevices: visibleDeviceCount > 0
+    property bool hasAnyDevices: connectedDevices.length > 0
+    property bool allDevicesHidden: hasAnyDevices && !hasVisibleDevices
     
     ConnectionType {
         id: connectionType
@@ -49,7 +51,8 @@ PlasmoidItem {
             return PlasmaCore.Types.ActiveStatus
         }
 
-        return hasVisibleDevices ? PlasmaCore.Types.ActiveStatus : PlasmaCore.Types.HiddenStatus
+        // Show widget if there are ANY devices (even if all hidden), so users can unhide them
+        return hasAnyDevices ? PlasmaCore.Types.ActiveStatus : PlasmaCore.Types.HiddenStatus
     }
     
     function updateTooltip() {
@@ -67,7 +70,7 @@ PlasmoidItem {
                     lines.push(displayName + ": " + device.percentage + "%")
                 }
             }
-            toolTipSubText = lines.length > 0 ? lines.join("\n\n") : "All devices hidden"
+            toolTipSubText = lines.length > 0 ? lines.join("\n\n") : "All devices hidden\nClick to unhide"
         }
     }
     
@@ -238,7 +241,8 @@ PlasmoidItem {
             return false
         }
         
-        property bool shouldShow: root.hasVisibleDevices || inEditMode
+        // Show if there are visible devices, all devices are hidden, or in edit mode
+        property bool shouldShow: root.hasVisibleDevices || root.allDevicesHidden || inEditMode
         
         // Only take space when we should be visible
         Layout.minimumWidth: shouldShow ? -1 : 0
@@ -248,15 +252,14 @@ PlasmoidItem {
         Layout.maximumWidth: shouldShow ? -1 : 0
         Layout.maximumHeight: shouldShow ? -1 : 0
         
-        // Placeholder icon when no devices are visible (only in edit mode)
         Kirigami.Icon {
             id: placeholderIcon
             anchors.centerIn: parent
-            source: "battery-profile-performance"
+            source: "battery-080"
             width: Kirigami.Units.iconSizes.smallMedium
             height: Kirigami.Units.iconSizes.smallMedium
-            visible: !root.hasVisibleDevices && inEditMode
-            opacity: 0.5
+            visible: !root.hasVisibleDevices && (inEditMode || root.allDevicesHidden)
+            opacity: inEditMode ? 0.5 : 1
         }
         
         RowLayout {
