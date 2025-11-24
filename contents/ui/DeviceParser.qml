@@ -14,83 +14,86 @@ QtObject {
             nativePath: "",
             percentage: -1,
             type: "",
-            icon: "input-mouse",
+            icon: "battery-symbolic",
             connectionType: connectionTypes.wired
         }
         
+        var deviceType = ""
+        
         for (var i = 0; i < lines.length; i++) {
-            var line = lines[i].trim()
+            var line = lines[i]
+            var trimmedLine = line.trim()
             
-            // Detect wireless devices and determine connection type
-            if (line.indexOf("native-path:") !== -1) {
-                device.nativePath = line.split(":")[1].trim()
-                var path = line.toLowerCase()
-                
-                // Bluetooth devices have MAC addresses in their native path
-                var hasMacAddress = /[0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}/.test(path)
-                
-                if (path.indexOf("bluez") !== -1 || 
-                    path.indexOf("bluetooth") !== -1 ||
-                    hasMacAddress) {
-                    device.connectionType = connectionTypes.bluetooth
-                }
-                else if (path.indexOf("gip") !== -1) {
-                    device.connectionType = connectionTypes.wireless
-                }
+            // Extract key-value pairs (these have colons)
+            if (trimmedLine.indexOf("native-path:") !== -1) {
+                device.nativePath = trimmedLine.split(":").slice(1).join(":").trim()
             }
-            
-            // Get device serial/MAC address
-            if (line.indexOf("serial:") !== -1) {
-                device.serial = line.split(":").slice(1).join(":").trim()
+            else if (trimmedLine.indexOf("serial:") !== -1) {
+                device.serial = trimmedLine.split(":").slice(1).join(":").trim()
             }
-            
-            // Get device model/name
-            if (line.indexOf("model:") !== -1) {
-                device.name = line.split(":")[1].trim()
+            else if (trimmedLine.indexOf("model:") !== -1) {
+                device.name = trimmedLine.split(":").slice(1).join(":").trim()
             }
-            
-            // Get battery percentage
-            if (line.indexOf("percentage:") !== -1) {
-                var percentStr = line.split(":")[1].trim().replace("%", "")
+            else if (trimmedLine.indexOf("percentage:") !== -1) {
+                var percentStr = trimmedLine.split(":")[1].trim().replace("%", "")
                 device.percentage = parseInt(percentStr)
             }
-            
-            // Determine device type and icon
-            var lowerLine = line.toLowerCase()
-            if (lowerLine.indexOf("gaming-input") !== -1 || 
-                lowerLine.indexOf("gaming") !== -1 || 
-                lowerLine.indexOf("controller") !== -1 || 
-                lowerLine.indexOf("gamepad") !== -1 ||
-                lowerLine.indexOf("dualsense") !== -1 ||
-                lowerLine.indexOf("dualshock") !== -1 ||
-                lowerLine.indexOf("xbox") !== -1) {
-                device.type = "gamepad"
-                device.icon = "input-gamepad"
-            } else if (lowerLine.indexOf("mouse") !== -1) {
-                device.type = "mouse"
-                device.icon = "input-mouse"
-            } else if (lowerLine.indexOf("keyboard") !== -1) {
-                device.type = "keyboard"
-                device.icon = "input-keyboard"
-            } else if (lowerLine.indexOf("headset") !== -1 || 
-                       lowerLine.indexOf("headphone") !== -1 ||
-                       lowerLine.indexOf("earbuds") !== -1) {
-                device.type = "headset"
-                device.icon = "audio-headset"
-            } else if (lowerLine.indexOf("phone") !== -1 ||
-                       lowerLine.indexOf("mobile") !== -1) {
-                device.type = "phone"
-                device.icon = "smartphone"
-            } else if (lowerLine.indexOf("tablet") !== -1) {
-                device.type = "tablet"
-                device.icon = "tablet"
+            // Detect device type: exactly 2 spaces of indentation, single word, no colon
+            else if (line.startsWith("  ") && !line.startsWith("    ") && 
+                     trimmedLine.indexOf(":") === -1 && trimmedLine.indexOf(" ") === -1 &&
+                     trimmedLine.length > 0) {
+                deviceType = trimmedLine
             }
+        }
+        
+        // Determine connection type from native-path
+        if (device.nativePath) {
+            var path = device.nativePath.toLowerCase()
+            var hasMacAddress = /[0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}/.test(path)
+            
+            if (path.indexOf("bluez") !== -1 || 
+                path.indexOf("bluetooth") !== -1 ||
+                path.indexOf("ps-controller") !== -1 ||
+                hasMacAddress) {
+                device.connectionType = connectionTypes.bluetooth
+            }
+            else if (path.indexOf("gip") !== -1 || path.indexOf("hidpp") !== -1) {
+                device.connectionType = connectionTypes.wireless
+            }
+        }
+
+        if (deviceType === "gaming-input") {
+            device.type = "gamepad"
+            device.icon = "input-gamepad"
+        } else if (deviceType === "mouse") {
+            device.type = "mouse"
+            device.icon = "input-mouse"
+        } else if (deviceType === "touchpad") {
+            device.type = "touchpad"
+            device.icon = "input-touchpad"
+        } else if (deviceType === "keyboard") {
+            device.type = "keyboard"
+            device.icon = "input-keyboard"
+        } else if (deviceType === "phone") {
+            device.type = "phone"
+            device.icon = "smartphone"
+        } else if (deviceType === "tablet") {
+            device.type = "tablet"
+            device.icon = "tablet"
+        } else if (deviceType === "headphones") {
+            device.type = "headphones"
+            device.icon = "audio-headphones"
+        } else if (deviceType.length > 0) {
+            device.type = deviceType
+            device.icon = "battery-symbolic"
         }
         
         // Use native path as identifier if no serial/MAC 
         if (!device.serial && device.nativePath) {
             device.serial = device.nativePath
         }
+        
+        device.name = device.name
         
         return device
     }

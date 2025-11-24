@@ -222,6 +222,15 @@ PlasmoidItem {
     compactRepresentation: Item {
         Layout.preferredWidth: row.implicitWidth
         Layout.preferredHeight: row.implicitHeight
+        visible: {
+            var visibleCount = 0
+            for (var i = 0; i < connectedDevices.length; i++) {
+                if (hiddenDevices.indexOf(connectedDevices[i].serial) === -1) {
+                    visibleCount++
+                }
+            }
+            return visibleCount > 0
+        }
         
         RowLayout {
             id: row
@@ -259,8 +268,14 @@ PlasmoidItem {
     fullRepresentation: Item {
         Layout.minimumWidth: Kirigami.Units.gridUnit * 25
         Layout.preferredWidth: Kirigami.Units.gridUnit * 30
-        Layout.minimumHeight: Kirigami.Units.gridUnit * 12
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 17
+        Layout.minimumHeight: Kirigami.Units.gridUnit * 8
+        Layout.preferredHeight: {
+            var baseHeight = Kirigami.Units.gridUnit * 5
+            var deviceHeight = connectedDevices.length * Kirigami.Units.gridUnit * 4
+            var totalHeight = baseHeight + deviceHeight
+            var maxHeight = Kirigami.Units.gridUnit * 17
+            return Math.min(totalHeight, maxHeight)
+        }
         Layout.maximumHeight: Kirigami.Units.gridUnit * 17
         
         ColumnLayout {
@@ -273,7 +288,7 @@ PlasmoidItem {
                 spacing: Kirigami.Units.smallSpacing
                 
                 PlasmaComponents.Label {
-                    text: "Connected Device Batteries"
+                    text: "Connected Devices"
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.2
                     Layout.fillWidth: true
