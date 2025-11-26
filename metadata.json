@@ -6,12 +6,12 @@
             }
         ],
         "Category": "System Information",
-        "Description": "Display battery percentage of connected devices in the system tray",
+        "Description": "Monitor battery levels of all connected devices",
         "Icon": "/icons/battery-monitor.png",
-        "Id": "com.github.itayavra.btbattery",
-        "Name": "Device Battery Monitor",
+        "Id": "com.github.itayavra.powerwatch",
+        "Name": "PowerWatch",
         "Version": "1.0",
-        "Website": "https://github.com/itayavra/btbattery"
+        "Website": "https://github.com/itayavra/powerwatch"
     },
     "KPackageStructure": "Plasma/Applet",
     "X-Plasma-API-Minimum-Version": "6.0"

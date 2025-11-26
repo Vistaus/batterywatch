@@ -38,7 +38,7 @@ PlasmoidItem {
     
     preferredRepresentation: compactRepresentation
     
-    toolTipMainText: "Device Battery Monitor"
+    toolTipMainText: "PowerWatch"
     toolTipSubText: "No devices"
     
     // Hide widget when no visible devices (except when user is configuring or panel is in edit mode)
@@ -319,7 +319,7 @@ PlasmoidItem {
                 spacing: Kirigami.Units.smallSpacing
                 
                 PlasmaComponents.Label {
-                    text: "Connected Devices"
+                    text: "Device Power Levels"
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.2
                     Layout.fillWidth: true
