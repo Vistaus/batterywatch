@@ -4,11 +4,9 @@
 
 ## Screenshots
 
-<div align="center">
-    <img src="contents/screenshots/screenshot1.png" alt="BatteryWatch Screenshot 1" style="border-radius: 5px;">&nbsp;
-    <img src="contents/screenshots/screenshot2.png" alt="BatteryWatch Screenshot 2" style="border-radius: 5px;">&nbsp;
-    <img src="contents/screenshots/screenshot3.png" alt="BatteryWatch Screenshot 3" style="border-radius: 5px;">
-</div>
+![BatteryWatch Screenshot 1](contents/screenshots/screenshot1.png)
+![BatteryWatch Screenshot 2](contents/screenshots/screenshot2.png)
+![BatteryWatch Screenshot 3](contents/screenshots/screenshot3.png)
 
 ## ✨ Features
 
