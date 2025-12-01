@@ -13,7 +13,7 @@
 ## ✨ Features
 
 *   **Unified Monitoring**: See the battery status of all connected devices in one place.
-*   **Smart Display**: A minimal tray icon that expands into a detailed list when clicked, and automatically hides when no devices are connected — no wasted space when nothing to show.
+*   **Smart Display**: A minimal tray icon that expands into a detailed list when clicked, and automatically hides when no devices are connected - no wasted space when nothing to show.
 *   **Bluetooth Control**: Disconnect Bluetooth devices directly from the widget.
 *   **Customizable Visibility**: Easily hide or show specific devices from the system tray to keep your workspace clutter-free.
 
@@ -46,6 +46,12 @@ kpackagetool6 --type Plasma/Applet --install BatteryWatch.plasmoid
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/itayavra/batterywatch/issues).
+
+## ❤️ Support the Project
+
+If you find BatteryWatch useful and want to support its development, consider buying me a coffee! 🍺
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-orange?style=for-the-badge&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/itayavra)
 
 ## 📄 License
 
