@@ -49,7 +49,6 @@ PlasmoidItem {
         return hasAnyDevices ? PlasmaCore.Types.ActiveStatus : PlasmaCore.Types.HiddenStatus
     }
 
-    // Connection Types Enum
     QtObject {
         id: connectionType
         readonly property int wired: 0
@@ -108,7 +107,6 @@ PlasmoidItem {
     }
     
     function refreshDevices() {
-        // Manual refresh - re-scan all devices immediately
         upowerPresenceSource.connectSource("upower -e")
     }
     
@@ -116,11 +114,6 @@ PlasmoidItem {
         loadHiddenDevices()
     }
     
-    // --- Smart Polling Implementation ---
-    // Efficiently checks for device presence (cheap) frequently, 
-    // and updates battery levels (expensive) infrequently.
-    
-    // 1. Presence Source: Checks for added/removed devices
     P5Support.DataSource {
         id: upowerPresenceSource
         engine: "executable"
@@ -132,33 +125,31 @@ PlasmoidItem {
             var lines = data["stdout"].split("\n")
             var foundPaths = []
             
-            // 1. Collect all current valid device paths
+            // Collect all current valid device paths
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i].trim()
                 if (line.startsWith("/org/freedesktop/UPower/devices/") && 
                     line.indexOf("DisplayDevice") === -1) {
                     foundPaths.push(line)
                     
-                    // SMART CHECK: Only fetch details if we don't know about this device yet
                     var known = false
                     for (var j = 0; j < connectedDevices.length; j++) {
-                        // Compare against the DBus object path, not the native path
+                        // Compare against the DBus object path
                         if (connectedDevices[j].objectPath === line) {
                             known = true
                             break
                         }
                     }
                     if (!known) {
-                        refreshDevice(line)
+                        refreshSpecificDevice(line)
                     }
                 }
             }
             
-            // 2. Remove devices that are no longer present
+            // Remove devices that are no longer present
             var pathsToRemove = []
             for (var i = 0; i < connectedDevices.length; i++) {
                 var device = connectedDevices[i]
-                // Use objectPath for robust comparison
                 if (device.objectPath && foundPaths.indexOf(device.objectPath) === -1) {
                     pathsToRemove.push(device.objectPath)
                 }
@@ -170,12 +161,11 @@ PlasmoidItem {
         }
         
         Component.onCompleted: {
-            // Initial scan
             connectSource("upower -e")
         }
     }
     
-    // 2. Presence Timer: Checks for hotplugged devices frequently (2s)
+    // Presence Timer: Checks for connected devices
     Timer {
         id: presenceTimer
         interval: 2000 
@@ -186,17 +176,16 @@ PlasmoidItem {
         }
     }
     
-    // 3. Battery Update Timer: Refreshes levels infrequently (60s)
+    // Battery Update Timer: Refreshes levels for connected devices
     Timer {
         id: updateTimer
         interval: 60000 
         running: true
         repeat: true
         onTriggered: {
-            // Refresh details for all known devices
             for (var i = 0; i < connectedDevices.length; i++) {
                 if (connectedDevices[i].objectPath) {
-                    refreshDevice(connectedDevices[i].objectPath)
+                    refreshSpecificDevice(connectedDevices[i].objectPath)
                 }
             }
         }
@@ -241,8 +230,7 @@ PlasmoidItem {
         }
     }
     
-    function refreshDevice(path) {
-        // Fetch details for this specific device
+    function refreshSpecificDevice(path) {
         deviceDetailsSource.connectSource("upower -i " + path)
     }
     
@@ -262,10 +250,8 @@ PlasmoidItem {
 
     
     function updateOrAddDevice(deviceInfo) {
-        // Find existing device by serial/objectPath
         var found = false
         for (var i = 0; i < connectedDevices.length; i++) {
-            // Match by serial OR valid object path
             var sameSerial = connectedDevices[i].serial && connectedDevices[i].serial === deviceInfo.serial
             var samePath = connectedDevices[i].objectPath && connectedDevices[i].objectPath === deviceInfo.objectPath
             
@@ -301,7 +287,6 @@ PlasmoidItem {
         updateTooltip()
     }
     
-    // Compact representation (what shows in the system tray)
     compactRepresentation: Item {
         property bool inEditMode: {
             if (Plasmoid.userConfiguring) return true
@@ -363,7 +348,6 @@ PlasmoidItem {
         }
     }
     
-    // Full representation (popup when clicked)
     fullRepresentation: Item {
         Layout.minimumWidth: Kirigami.Units.gridUnit * 25
         Layout.preferredWidth: Kirigami.Units.gridUnit * 30

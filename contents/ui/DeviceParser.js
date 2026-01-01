@@ -1,7 +1,6 @@
 
 // Device information parser for UPower output
 
-// Helper to determine icon from device type string
 function getIconForType(deviceType) {
     switch (deviceType) {
         case "gaming-input":
@@ -29,7 +28,6 @@ function getIconForType(deviceType) {
     }
 }
 
-// Main parser function
 function parseDeviceInfo(output, connectionTypes) {
     var lines = output.split("\n")
     var device = {
@@ -49,7 +47,6 @@ function parseDeviceInfo(output, connectionTypes) {
         var line = lines[i]
         var trimmedLine = line.trim()
 
-        // Extract key-value pairs
         if (trimmedLine.indexOf("native-path:") !== -1) {
             device.nativePath = trimmedLine.split(":").slice(1).join(":").trim()
         }
@@ -85,13 +82,11 @@ function parseDeviceInfo(output, connectionTypes) {
         }
     }
 
-    // Determine type/icon
     if (deviceType.length > 0) {
         device.type = deviceType
         device.icon = getIconForType(deviceType)
     }
 
-    // Use native path as identifier if no serial/MAC 
     if (!device.serial && device.nativePath) {
         device.serial = device.nativePath
     }
