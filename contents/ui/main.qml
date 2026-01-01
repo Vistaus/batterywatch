@@ -211,7 +211,8 @@ PlasmoidItem {
             var output = data["stdout"]
             var deviceInfo = DeviceParser.parseDeviceInfo(output, connectionType)
             
-            if (deviceInfo && deviceInfo.percentage >= 0) {
+            // Only show wireless/Bluetooth devices, not wired
+            if (deviceInfo && deviceInfo.connectionType !== connectionType.wired && deviceInfo.percentage >= 0) {
                 // Store the DBus object path for syncing
                 deviceInfo.objectPath = objectPath
                 updateOrAddDevice(deviceInfo)
