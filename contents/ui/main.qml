@@ -44,6 +44,44 @@ PlasmoidItem {
     property bool hasAnyDevices: allDevices.length > 0
     property bool allDevicesHidden: hasAnyDevices && !hasVisibleDevices
     
+    // Tray items: flattened list for compact representation
+    // For multi-battery devices, only shows batteries with showInTray=true
+    property var trayItems: buildTrayItems(allDevices, hiddenDevices)
+    
+    function buildTrayItems(devices, hidden) {
+        var items = []
+        for (var i = 0; i < devices.length; i++) {
+            var device = devices[i]
+            if (hidden.indexOf(device.serial) !== -1) continue
+            
+            // Multi-battery device (e.g., AirPods)
+            if (device.batteries && device.batteries.length > 1) {
+                for (var j = 0; j < device.batteries.length; j++) {
+                    var bat = device.batteries[j]
+                    
+                    // Skip batteries marked as not for tray (e.g., Case)
+                    if (bat.showInTray === false) continue
+                    
+                    items.push({
+                        icon: device.icon,
+                        percentage: bat.percentage,
+                        label: bat.label,
+                        deviceSerial: device.serial
+                    })
+                }
+            } else {
+                // Single battery device
+                items.push({
+                    icon: device.icon,
+                    percentage: device.percentage,
+                    label: null,
+                    deviceSerial: device.serial
+                })
+            }
+        }
+        return items
+    }
+    
     // ═══════════════════════════════════════════════════════════════════════
     // DEVICE MERGING
     // ═══════════════════════════════════════════════════════════════════════
@@ -225,10 +263,9 @@ PlasmoidItem {
             visible: root.hasVisibleDevices
             
             Repeater {
-                model: root.allDevices
+                model: root.trayItems
                 
                 RowLayout {
-                    visible: root.hiddenDevices.indexOf(modelData.serial) === -1
                     spacing: 2
                     
                     Kirigami.Icon {
@@ -310,12 +347,7 @@ PlasmoidItem {
                             
                             Item {
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: {
-                                    var hasMultiBattery = modelData.batteries && modelData.batteries.length > 1
-                                    return hasMultiBattery 
-                                        ? Kirigami.Units.gridUnit * 5
-                                        : Kirigami.Units.gridUnit * 4
-                                }
+                                Layout.preferredHeight: Kirigami.Units.gridUnit * 3.5
                                 Layout.topMargin: Kirigami.Units.smallSpacing
                                 Layout.bottomMargin: Kirigami.Units.smallSpacing
                                 
@@ -331,12 +363,13 @@ PlasmoidItem {
                                         Layout.alignment: Qt.AlignVCenter
                                     }
                                     
-                                    // Device info
+                                    // Device info (2 rows: name, then serial/MAC)
                                     ColumnLayout {
                                         Layout.fillWidth: true
                                         Layout.alignment: Qt.AlignVCenter
                                         spacing: 2
                                         
+                                        // Row 1: Device name
                                         PlasmaComponents.Label {
                                             text: modelData.name || "Unknown Device"
                                             font.bold: true
@@ -344,60 +377,24 @@ PlasmoidItem {
                                             elide: Text.ElideRight
                                         }
                                         
+                                        // Row 2: Serial/MAC (always shown)
                                         PlasmaComponents.Label {
-                                            text: modelData.model || modelData.serial || ""
+                                            text: modelData.serial || ""
                                             font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                                             color: Kirigami.Theme.disabledTextColor
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
-                                            visible: text.length > 0
-                                        }
-                                        
-                                        // Multi-battery display
-                                        RowLayout {
-                                            visible: modelData.batteries && modelData.batteries.length > 1
-                                            Layout.fillWidth: true
-                                            spacing: Kirigami.Units.largeSpacing
-                                            
-                                            Repeater {
-                                                model: modelData.batteries || []
-                                                
-                                                RowLayout {
-                                                    spacing: 4
-                                                    
-                                                    PlasmaComponents.Label {
-                                                        text: (modelData.label || "Battery") + ":"
-                                                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                                                        color: Kirigami.Theme.disabledTextColor
-                                                    }
-                                                    
-                                                    PlasmaComponents.Label {
-                                                        text: modelData.percentage + "%"
-                                                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                                                        font.bold: true
-                                                    }
-                                                    
-                                                    Kirigami.Icon {
-                                                        visible: modelData.charging === true
-                                                        source: "battery-charging"
-                                                        Layout.preferredWidth: Kirigami.Units.iconSizes.small
-                                                        Layout.preferredHeight: Kirigami.Units.iconSizes.small
-                                                    }
-                                                }
-                                            }
                                         }
                                     }
                                     
-                                    // Actions
+                                    // Actions and battery info
                                     RowLayout {
                                         Layout.alignment: Qt.AlignVCenter
                                         spacing: 0
                                         
-                                        // Disconnect button (only for UPower Bluetooth devices)
+                                        // Disconnect button (for any Bluetooth device with MAC address)
                                         PlasmaComponents.ToolButton {
-                                            visible: modelData.source !== "companion" && 
-                                                     modelData.connectionType === 2 && 
-                                                     modelData.bluetoothAddress
+                                            visible: modelData.connectionType === 2 && modelData.bluetoothAddress
                                             icon.name: "network-disconnect"
                                             display: PlasmaComponents.AbstractButton.IconOnly
                                             onClicked: root.disconnectBluetoothDevice(modelData.bluetoothAddress)
@@ -414,13 +411,38 @@ PlasmoidItem {
                                             }
                                         }
                                         
-                                        // Battery percentage (for single-battery devices)
+                                        // Spacer between buttons and battery info
+                                        Item { Layout.preferredWidth: Kirigami.Units.smallSpacing }
+                                        
+                                        // Battery info (right side, vertically centered)
                                         PlasmaComponents.Label {
                                             visible: !modelData.batteries || modelData.batteries.length <= 1
                                             text: modelData.percentage + "%"
                                             font.bold: true
                                             Layout.minimumWidth: Kirigami.Units.gridUnit * 2.5
                                             horizontalAlignment: Text.AlignRight
+                                        }
+                                        
+                                        // Multi-battery display (for AirPods etc) - compact format
+                                        Row {
+                                            visible: modelData.batteries && modelData.batteries.length > 1
+                                            spacing: Kirigami.Units.largeSpacing
+                                            
+                                            Repeater {
+                                                model: modelData.batteries || []
+                                                
+                                                Row {
+                                                    spacing: 1
+                                                    PlasmaComponents.Label {
+                                                        text: (modelData.label || "?").charAt(0).toUpperCase() + ":"
+                                                        color: Kirigami.Theme.disabledTextColor
+                                                    }
+                                                    PlasmaComponents.Label {
+                                                        text: modelData.percentage + "%" + (modelData.charging ? "⚡" : "")
+                                                        font.bold: true
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

@@ -74,11 +74,17 @@ Item {
             var total = 0
             data.batteries.forEach(function(bat) {
                 var pct = typeof bat.percentage === 'number' ? bat.percentage : 0
+                var label = bat.label || null
+                var labelLower = (label || "").toLowerCase()
+                
                 total += pct
+                var isCharging = bat.charging === true
                 batteries.push({
-                    label: bat.label || null,
+                    label: label,
                     percentage: pct,
-                    charging: bat.charging === true
+                    charging: isCharging,
+                    // Only show in tray if: not Case AND not charging
+                    showInTray: labelLower !== "case" && !isCharging
                 })
             })
             percentage = Math.round(total / batteries.length)
