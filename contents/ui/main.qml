@@ -5,8 +5,7 @@ import org.kde.plasma.plasma5support 2.0 as P5Support
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami 2.20 as Kirigami
-import org.kde.config as KConfig
-import "DeviceParser.js" as DeviceParser
+unusedimport "DeviceParser.js" as DeviceParser
 
 PlasmoidItem {
     id: root
@@ -99,11 +98,12 @@ PlasmoidItem {
         hiddenDevices = hiddenDevices.slice() // Trigger property change
         saveHiddenDevices()
         updateTooltip()
-        Plasmoid.status = Plasmoid.status // Force status update
     }
     
-    function disconnectBluetoothDevice(serial) {
-        bluetoothCtlSource.connectSource("bluetoothctl disconnect " + serial)
+    function disconnectBluetoothDevice(bluetoothAddress) {
+        if (bluetoothAddress) {
+            bluetoothCtlSource.connectSource("bluetoothctl disconnect " + bluetoothAddress)
+        }
     }
     
     function refreshDevices() {
@@ -441,11 +441,11 @@ PlasmoidItem {
                                         Layout.alignment: Qt.AlignVCenter
                                         
                                         PlasmaComponents.ToolButton {
-                                            visible: modelData.connectionType === connectionType.bluetooth
+                                            visible: modelData.connectionType === connectionType.bluetooth && modelData.bluetoothAddress
                                             icon.name: "network-disconnect"
                                             text: "Disconnect"
                                             display: PlasmaComponents.AbstractButton.IconOnly
-                                            onClicked: disconnectBluetoothDevice(modelData.serial)
+                                            onClicked: disconnectBluetoothDevice(modelData.bluetoothAddress)
                                             
                                             PlasmaComponents.ToolTip {
                                                 text: "Disconnect device"

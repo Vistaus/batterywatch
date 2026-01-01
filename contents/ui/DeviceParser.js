@@ -38,7 +38,8 @@ function parseDeviceInfo(output, connectionTypes) {
         type: "",
         icon: "battery-symbolic",
         connectionType: connectionTypes.wired,
-        objectPath: ""
+        objectPath: "",
+        bluetoothAddress: ""
     }
 
     var deviceType = ""
@@ -68,15 +69,19 @@ function parseDeviceInfo(output, connectionTypes) {
         }
     }
 
-    // Determine connection type from native-path
+    // Determine connection type from native-path and extract Bluetooth MAC address
     if (device.nativePath) {
         var path = device.nativePath.toLowerCase()
-        var hasMacAddress = /[0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}/.test(path)
+        var macMatch = path.match(/([0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2})/i)
 
         if (path.indexOf("bluez") !== -1 ||
             path.indexOf("bluetooth") !== -1 ||
-            hasMacAddress) {
+            macMatch) {
             device.connectionType = connectionTypes.bluetooth
+            // Extract and normalize MAC address for bluetoothctl
+            if (macMatch) {
+                device.bluetoothAddress = macMatch[1].replace(/[_\-]/g, ":").toUpperCase()
+            }
         } else {
             device.connectionType = connectionTypes.wireless
         }
