@@ -2,7 +2,7 @@ import QtQuick 2.15
 import org.kde.plasma.plasma5support 2.0 as P5Support
 import "../DeviceParser.js" as DeviceParser
 
-// Companion service provider (OPTIONAL - widget works without it)
+// BatteryWatch Companion service provider
 Item {
     id: root
     visible: false
