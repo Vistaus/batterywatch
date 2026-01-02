@@ -127,10 +127,10 @@ PlasmoidItem {
     
     preferredRepresentation: compactRepresentation
     
-    toolTipMainText: "BatteryWatch v" + Plasmoid.metaData.version
+    toolTipMainText: i18n("BatteryWatch v%1", Plasmoid.metaData.version)
     toolTipSubText: {
         if (allDevices.length === 0) {
-            return "No connected devices"
+            return i18n("No connected devices")
         }
         
         var lines = []
@@ -145,17 +145,17 @@ PlasmoidItem {
                 var parts = []
                 for (var j = 0; j < device.batteries.length; j++) {
                     var bat = device.batteries[j]
-                    parts.push((bat.label || "Battery") + ": " + bat.percentage + "%")
+                    parts.push(i18n("%1: %2%", bat.label || "Battery", bat.percentage))
                 }
-                line += " - " + parts.join(", ")
+                line = i18n("%1 - %2", line, parts.join(i18n(", ")))
             } else {
-                line += ": " + device.percentage + "%"
+                line = i18n("%1: %2%", line, device.percentage)
             }
             
             lines.push(line)
         }
         
-        return lines.length > 0 ? lines.join("\n") : "All devices hidden"
+        return lines.length > 0 ? lines.join("\n") : i18n("All devices hidden")
     }
     
     Plasmoid.status: {
@@ -186,7 +186,7 @@ PlasmoidItem {
     }
     
     function saveHiddenDevices() {
-        Plasmoid.configuration.hiddenDevices = hiddenDevices.join(",")
+        Plasmoid.configuration.hiddenDevices = hiddenDevices.join(i18n(", "))
     }
     
     function toggleDeviceVisibility(serial) {
@@ -275,7 +275,7 @@ PlasmoidItem {
                     }
                     
                     PlasmaComponents.Label {
-                        text: modelData.percentage + "%"
+                        text: i18n("%1%", modelData.percentage)
                         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                     }
                 }
@@ -315,7 +315,7 @@ PlasmoidItem {
                 spacing: Kirigami.Units.smallSpacing
                 
                 PlasmaComponents.Label {
-                    text: "Device Battery Levels"
+                    text: i18n("Device Battery Levels")
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.2
                     Layout.fillWidth: true
@@ -323,11 +323,11 @@ PlasmoidItem {
                 
                 PlasmaComponents.ToolButton {
                     icon.name: "view-refresh"
-                    text: "Refresh"
+                    text: i18n("Refresh")
                     display: PlasmaComponents.AbstractButton.IconOnly
                     
                     PlasmaComponents.ToolTip {
-                        text: "Refresh devices"
+                        text: i18n("Refresh devices")
                     }
                     
                     onClicked: {
@@ -382,7 +382,7 @@ PlasmoidItem {
                                         spacing: 2
                                         
                                         PlasmaComponents.Label {
-                                            text: device.name || "Unknown Device"
+                                            text: device.name || i18n("Unknown Device")
                                             font.bold: true
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
@@ -408,9 +408,9 @@ PlasmoidItem {
                                                 PlasmaComponents.Label {
                                                     text: {
                                                         var bat = modelData
-                                                        var label = bat.label || "Battery"
+                                                        var label = bat.label || i18n("Battery")
                                                         var charging = bat.charging ? " ⚡" : ""
-                                                        return label + ": " + bat.percentage + "%" + charging
+                                                        return i18n("%1: %2%%3", label, bat.percentage, charging)
                                                     }
                                                     font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                                                 }
@@ -424,12 +424,12 @@ PlasmoidItem {
                                         PlasmaComponents.ToolButton {
                                             visible: device.connectionType === 2 && device.bluetoothAddress
                                             icon.name: "network-disconnect"
-                                            text: "Disconnect"
+                                            text: i18n("Disconnect")
                                             display: PlasmaComponents.AbstractButton.IconOnly
                                             onClicked: disconnectBluetoothDevice(device.bluetoothAddress)
                                             
                                             PlasmaComponents.ToolTip {
-                                                text: "Disconnect device"
+                                                text: i18n("Disconnect device")
                                             }
                                             
                                             MouseArea {
@@ -442,12 +442,12 @@ PlasmoidItem {
                                         
                                         PlasmaComponents.ToolButton {
                                             icon.name: root.hiddenDevices.indexOf(device.serial) === -1 ? "view-visible" : "view-hidden"
-                                            text: root.hiddenDevices.indexOf(device.serial) === -1 ? "Hide" : "Show"
+                                            text: root.hiddenDevices.indexOf(device.serial) === -1 ? i18n("Hide") : i18n("Show")
                                             display: PlasmaComponents.AbstractButton.IconOnly
                                             onClicked: toggleDeviceVisibility(device.serial)
                                             
                                             PlasmaComponents.ToolTip {
-                                                text: root.hiddenDevices.indexOf(device.serial) === -1 ? "Hide from tray" : "Show in tray"
+                                                text: root.hiddenDevices.indexOf(device.serial) === -1 ? i18n("Hide from tray") : i18n("Show in tray")
                                             }
                                             
                                             MouseArea {
@@ -461,7 +461,7 @@ PlasmoidItem {
                                         // Single battery: show percentage
                                         PlasmaComponents.Label {
                                             visible: !hasMultipleBatteries
-                                            text: device.percentage + "%"
+                                            text: i18n("%1%", device.percentage)
                                             font.bold: true
                                             Layout.minimumWidth: Kirigami.Units.gridUnit * 2
                                             horizontalAlignment: Text.AlignRight
@@ -479,7 +479,7 @@ PlasmoidItem {
                     
                     PlasmaComponents.Label {
                         visible: root.allDevices.length === 0
-                        text: "No connected devices with battery info found"
+                        text: i18n("No connected devices with battery info found")
                         Layout.fillWidth: true
                         Layout.topMargin: Kirigami.Units.largeSpacing
                         horizontalAlignment: Text.AlignHCenter

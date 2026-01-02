@@ -51,7 +51,7 @@ Item {
         }
         
         return {
-            name: data.name || data.model || "Unknown Device",
+            name: data.name || data.model || i18n("Unknown Device"),
             serial: id,
             percentage: percentage,
             icon: icon,
@@ -80,7 +80,7 @@ Item {
                 if (root.available) {
                     root.available = false
                     root.devices = []
-                    console.log("BatteryWatch: Companion service disconnected")
+                    console.log(i18n("BatteryWatch: Companion service disconnected"))
                 }
                 return
             }
@@ -101,10 +101,10 @@ Item {
                 
                 if (!root.available) {
                     root.available = true
-                    console.log("BatteryWatch: Companion service connected")
+                    console.log(i18n("BatteryWatch: Companion service disconnected"))
                 }
             } catch (e) {
-                console.warn("BatteryWatch: Failed to parse companion data:", e)
+                console.warn(i18n("BatteryWatch: Failed to parse companion data:"), e)
             }
         }
     }

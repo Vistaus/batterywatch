@@ -95,8 +95,8 @@ Item {
             var modelLower = device.model.toLowerCase()
             var overrideType = root.upowerDeviceTypeOverrides[modelLower]
             if (overrideType) {
-                console.log("BatteryWatch: Applying UPower device override for '" + device.model + "': " + 
-                           device.type + " -> " + overrideType)
+                console.log(i18n("BatteryWatch: Applying UPower device override for '%1': %2 -> %3", 
+                    device.model, device.type, overrideType))
                 device.type = overrideType
             }
         }
