@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import org.kde.plasma.plasma5support 2.0 as P5Support
-import "../DeviceParser.js" as DeviceParser
+import "../DeviceUtils.js" as DeviceUtils
 
 // BatteryWatch Companion service provider
 Item {
@@ -14,57 +14,15 @@ Item {
         pollSource.connectSource("gdbus call --session --dest org.batterywatch.Companion --object-path /org/batterywatch/Companion --method org.batterywatch.Companion.GetDevices 2>/dev/null")
     }
     
-    P5Support.DataSource {
-        id: pollSource
-        engine: "executable"
-        connectedSources: []
-        interval: 0
-        
-        onNewData: function(sourceName, data) {
-            disconnectSource(sourceName)
-            
-            var output = data["stdout"] || ""
-            if (data["exit code"] !== 0 || !output.trim()) {
-                if (root.available) {
-                    root.available = false
-                    root.devices = []
-                    console.log("BatteryWatch: Companion service disconnected")
-                }
-                return
-            }
-            
-            // Parse gdbus output: ('json_string',)
-            var match = output.match(/\('(.*)'\,?\)/)
-            if (!match) return
-            
-            try {
-                var jsonStr = match[1].replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\\\/g, '\\')
-                var rawDevices = JSON.parse(jsonStr)
-                
-                if (!Array.isArray(rawDevices)) return
-                
-                root.devices = rawDevices.map(function(d) {
-                    return parseDevice(d)
-                }).filter(function(d) { return d !== null })
-                
-                if (!root.available) {
-                    root.available = true
-                    console.log("BatteryWatch: Companion service connected")
-                }
-            } catch (e) {
-                console.warn("BatteryWatch: Failed to parse companion data:", e)
-            }
-        }
-    }
-    
-    function parseDevice(data) {
+    // Parse Companion JSON data into device object
+    function parseCompanionDevice(data) {
         if (!data || typeof data !== 'object') return null
         
         var id = data.id || data.address || ""
         if (!id) return null
         
         var deviceType = data.device_type || "unknown"
-        var icon = data.icon_name || DeviceParser.getIconForType(deviceType)
+        var icon = data.icon_name || DeviceUtils.getIconForType(deviceType)
         
         // Handle batteries array
         var batteries = []
@@ -105,6 +63,49 @@ Item {
             objectPath: "",
             connectionType: 2,
             bluetoothAddress: id
+        }
+    }
+    
+    P5Support.DataSource {
+        id: pollSource
+        engine: "executable"
+        connectedSources: []
+        interval: 0
+        
+        onNewData: function(sourceName, data) {
+            disconnectSource(sourceName)
+            
+            var output = data["stdout"] || ""
+            if (data["exit code"] !== 0 || !output.trim()) {
+                if (root.available) {
+                    root.available = false
+                    root.devices = []
+                    console.log("BatteryWatch: Companion service disconnected")
+                }
+                return
+            }
+            
+            // Parse gdbus output: ('json_string',)
+            var match = output.match(/\('(.*)'\,?\)/)
+            if (!match) return
+            
+            try {
+                var jsonStr = match[1].replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+                var rawDevices = JSON.parse(jsonStr)
+                
+                if (!Array.isArray(rawDevices)) return
+                
+                root.devices = rawDevices.map(function(d) {
+                    return parseCompanionDevice(d)
+                }).filter(function(d) { return d !== null })
+                
+                if (!root.available) {
+                    root.available = true
+                    console.log("BatteryWatch: Companion service connected")
+                }
+            } catch (e) {
+                console.warn("BatteryWatch: Failed to parse companion data:", e)
+            }
         }
     }
     

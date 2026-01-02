@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import org.kde.plasma.plasma5support 2.0 as P5Support
-import "../DeviceParser.js" as DeviceParser
+import "../DeviceUtils.js" as DeviceUtils
 
 // UPower device provider
 Item {
@@ -15,6 +15,81 @@ Item {
     
     function refresh() {
         listSource.connectSource("upower -e")
+    }
+    
+    // Parse UPower text output into device object
+    function parseUPowerOutput(output, objectPath) {
+        var lines = output.split("\n")
+        var device = {
+            name: "",
+            serial: "",
+            nativePath: "",
+            percentage: -1,
+            type: "",
+            icon: "battery-symbolic",
+            connectionType: root.wiredType,
+            objectPath: objectPath,
+            bluetoothAddress: "",
+            source: "upower",
+            batteries: [],
+            model: ""
+        }
+
+        var deviceType = ""
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i]
+            var trimmedLine = line.trim()
+
+            if (trimmedLine.indexOf("native-path:") !== -1) {
+                device.nativePath = trimmedLine.split(":").slice(1).join(":").trim()
+            }
+            else if (trimmedLine.indexOf("serial:") !== -1) {
+                device.serial = trimmedLine.split(":").slice(1).join(":").trim()
+            }
+            else if (trimmedLine.indexOf("model:") !== -1) {
+                device.name = trimmedLine.split(":").slice(1).join(":").trim()
+            }
+            else if (trimmedLine.indexOf("percentage:") !== -1) {
+                var percentStr = trimmedLine.split(":")[1].trim().replace("%", "")
+                device.percentage = parseInt(percentStr)
+            }
+            // Detect device type: exactly 2 spaces of indentation, single word, no colon
+            else if (line.startsWith("  ") && !line.startsWith("    ") &&
+                trimmedLine.indexOf(":") === -1 && trimmedLine.indexOf(" ") === -1 &&
+                trimmedLine.length > 0) {
+                deviceType = trimmedLine
+            }
+        }
+
+        // Determine connection type from native-path and extract Bluetooth MAC address
+        if (device.nativePath) {
+            var path = device.nativePath.toLowerCase()
+            var macMatch = path.match(/([0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2}[:\-_][0-9a-f]{2})/i)
+
+            if (path.indexOf("bluez") !== -1 ||
+                path.indexOf("bluetooth") !== -1 ||
+                macMatch) {
+                device.connectionType = root.bluetoothType
+                // Extract and normalize MAC address for bluetoothctl
+                if (macMatch) {
+                    device.bluetoothAddress = macMatch[1].replace(/[_\-]/g, ":").toUpperCase()
+                }
+            } else {
+                device.connectionType = root.wirelessType
+            }
+        }
+
+        if (deviceType.length > 0) {
+            device.type = deviceType
+            device.icon = DeviceUtils.getIconForType(deviceType)
+        }
+
+        if (!device.serial && device.nativePath) {
+            device.serial = device.nativePath
+        }
+
+        return device
     }
     
     P5Support.DataSource {
@@ -65,13 +140,9 @@ Item {
             disconnectSource(sourceName)
             
             var objectPath = sourceName.split(" ").pop()
-            var connectionTypes = { wired: root.wiredType, wireless: root.wirelessType, bluetooth: root.bluetoothType }
-            var info = DeviceParser.parseDeviceInfo(data["stdout"], connectionTypes)
+            var info = parseUPowerOutput(data["stdout"], objectPath)
             
             if (info && info.connectionType !== root.wiredType && info.percentage >= 0) {
-                info.objectPath = objectPath
-                info.source = "upower"
-                
                 // Update or add device
                 var updated = false
                 var newDevices = root.devices.map(function(d) {

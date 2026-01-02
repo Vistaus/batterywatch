@@ -136,23 +136,23 @@ PlasmoidItem {
         var lines = []
         for (var i = 0; i < allDevices.length; i++) {
             var device = allDevices[i]
-            if (hiddenDevices.indexOf(device.serial) === -1) {
-                var line = device.name
-                
-                // Multi-battery display
-                if (device.batteries && device.batteries.length > 1) {
-                    var parts = []
-                    for (var j = 0; j < device.batteries.length; j++) {
-                        var bat = device.batteries[j]
-                        parts.push((bat.label || "Battery") + ": " + bat.percentage + "%")
-                    }
-                    line += " - " + parts.join(", ")
-                } else {
-                    line += ": " + device.percentage + "%"
+            if (hiddenDevices.indexOf(device.serial) !== -1) continue
+            
+            var line = device.name
+            
+            // Multi-battery display
+            if (device.batteries && device.batteries.length > 1) {
+                var parts = []
+                for (var j = 0; j < device.batteries.length; j++) {
+                    var bat = device.batteries[j]
+                    parts.push((bat.label || "Battery") + ": " + bat.percentage + "%")
                 }
-                
-                lines.push(line)
+                line += " - " + parts.join(", ")
+            } else {
+                line += ": " + device.percentage + "%"
             }
+            
+            lines.push(line)
         }
         
         return lines.length > 0 ? lines.join("\n") : "All devices hidden"
