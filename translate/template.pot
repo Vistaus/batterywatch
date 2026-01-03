@@ -1,0 +1,218 @@
+# Translation of batterywatch in LANGUAGE
+# Copyright (C) 2026
+# This file is distributed under the same license as the batterywatch package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: batterywatch\n"
+"Report-Msgid-Bugs-To: https://github.com/itayavra/batterywatch/\n"
+"POT-Creation-Date: 2026-01-03 15:06+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../metadata.desktop
+msgid "BatteryWatch"
+msgstr ""
+
+#: ../contents/config/config.qml
+msgid "OpenLinkHub Integration"
+msgstr ""
+
+#: ../contents/ui/config/OpenLinkHub.qml
+msgid "Enable OpenLinkHub Integration: "
+msgstr ""
+
+#: ../contents/ui/config/OpenLinkHub.qml
+msgid "Enabled"
+msgstr ""
+
+#: ../contents/ui/config/OpenLinkHub.qml
+msgid "OpenLinkHub Port: "
+msgstr ""
+
+#. i18n: %1 is the version number.
+#: ../contents/ui/main.qml
+msgid "BatteryWatch v%1"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "No connected devices"
+msgstr ""
+
+#. i18n: %1 can be the device name or, in the case of multiple batteries, the battery label,
+#. or simply the word, ‘Battery’. %2 is the charge percentage value.
+#: ../contents/ui/main.qml
+msgid "%1: %2%"
+msgstr ""
+
+#. i18n: The delimiter when listing multiple batteries in the same device.
+#: ../contents/ui/main.qml
+msgid ", "
+msgstr ""
+
+#. i18n: Used when there are multiple batteries in a device.
+#. %1 is the device name.
+#. %2 is the delimited list of the device's batteries and their charge percentages.
+#: ../contents/ui/main.qml
+msgid "%1 - %2"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "All devices hidden"
+msgstr ""
+
+#. i18n: %1 is the charge percentage value.
+#: ../contents/ui/main.qml
+msgid "%1%"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Device Battery Levels"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Refresh"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Refresh devices"
+msgstr ""
+
+#: ../contents/ui/main.qml ../contents/ui/providers/CompanionProvider.qml ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Unknown Device"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Battery"
+msgstr ""
+
+#. i18n: %1 is the battery label or simply the word, ‘Battery’. %2 is the charge percentage value.
+#. %3 is a Unicode lightning symbol displayed when the device is charging.
+#: ../contents/ui/main.qml
+msgid "%1: %2%%3"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Disconnect"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Disconnect device"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Hide"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Show"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Hide from tray"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "Show in tray"
+msgstr ""
+
+#: ../contents/ui/main.qml
+msgid "No connected devices with battery info found"
+msgstr ""
+
+#: ../contents/ui/providers/CompanionProvider.qml
+msgid "BatteryWatch: Companion service disconnected"
+msgstr ""
+
+#: ../contents/ui/providers/CompanionProvider.qml
+msgid "BatteryWatch: Failed to parse companion data:"
+msgstr ""
+
+#. i18n: %1 is the number of devices found.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Devices found: %1"
+msgstr ""
+
+#. i18n: %1 is the error.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Server error: %1"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Server responded without any battery data!"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Failed to parse battery data:"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid battery data received:"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid device data for serial:"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Error processing battery data:"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid battery device data, skipping"
+msgstr ""
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Device '%1' is not connected, removing."
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Processed devices:"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid device data received for device creation"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid battery device data for device creation"
+msgstr ""
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Device '%1' is not connected, skipping."
+msgstr ""
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Fetching device data for serial: %1"
+msgstr ""
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Successfully fetched device data for serial: %1"
+msgstr ""
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Failed to parse device data:"
+msgstr ""
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Server error fetching device '%1':"
+msgstr ""
+
+#. i18n: Used when a device is known by BatteryWatch to be misreported by UPower.
+#. %1 is the device's model name. %2 is the erroneously reported device type (e.g.: ‘mouse’).
+#. %3 is the correct device type.
+#: ../contents/ui/providers/UPowerProvider.qml
+msgid "BatteryWatch: Applying UPower device override for '%1': %2 -> %3"
+msgstr ""

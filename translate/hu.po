@@ -1,0 +1,225 @@
+# Translation of batterywatch in hu
+# Copyright (C) 2026
+# This file is distributed under the same license as the batterywatch package.
+#
+# SPDX-FileCopyrightText: 2026 Levente Pál Szíjártó <szijartoleventepal@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: batterywatch\n"
+"Report-Msgid-Bugs-To: https://github.com/itayavra/batterywatch/\n"
+"POT-Creation-Date: 2026-01-03 15:06+0100\n"
+"PO-Revision-Date: 2026-01-03 15:19+0100\n"
+"Last-Translator: Levente Pál Szíjártó <szijartoleventepal@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.12.0\n"
+
+#: ../metadata.desktop
+msgid "BatteryWatch"
+msgstr "BatteryWatch"
+
+#: ../contents/config/config.qml
+msgid "OpenLinkHub Integration"
+msgstr "OpenLinkHub-integráció"
+
+#: ../contents/ui/config/OpenLinkHub.qml
+msgid "Enable OpenLinkHub Integration: "
+msgstr "OpenLinkHub-integráció engedélyezése: "
+
+#: ../contents/ui/config/OpenLinkHub.qml
+msgid "Enabled"
+msgstr "Engedélyezve"
+
+#: ../contents/ui/config/OpenLinkHub.qml
+msgid "OpenLinkHub Port: "
+msgstr "OpenLinkHub-port: "
+
+#. i18n: %1 is the version number.
+#: ../contents/ui/main.qml
+msgid "BatteryWatch v%1"
+msgstr "BatteryWatch v%1"
+
+#: ../contents/ui/main.qml
+msgid "No connected devices"
+msgstr "Nincsenek csatlakoztatott eszközök"
+
+#. i18n: %1 can be the device name or, in the case of multiple batteries, the battery label,
+#. or simply the word, ‘Battery’. %2 is the charge percentage value.
+#: ../contents/ui/main.qml
+msgid "%1: %2%"
+msgstr "%1: %2%"
+
+#. i18n: The delimiter when listing multiple batteries in the same device.
+#: ../contents/ui/main.qml
+msgid ", "
+msgstr ", "
+
+#. i18n: Used when there are multiple batteries in a device.
+#. %1 is the device name.
+#. %2 is the delimited list of the device's batteries and their charge percentages.
+#: ../contents/ui/main.qml
+msgid "%1 - %2"
+msgstr "%1 - %2"
+
+#: ../contents/ui/main.qml
+msgid "All devices hidden"
+msgstr "Minden eszköz rejtett"
+
+#. i18n: %1 is the charge percentage value.
+#: ../contents/ui/main.qml
+msgid "%1%"
+msgstr "%1%"
+
+#: ../contents/ui/main.qml
+msgid "Device Battery Levels"
+msgstr "Eszközök töltöttsége"
+
+#: ../contents/ui/main.qml
+msgid "Refresh"
+msgstr "Frissítés"
+
+#: ../contents/ui/main.qml
+msgid "Refresh devices"
+msgstr "Eszközlista frissítése"
+
+#: ../contents/ui/main.qml ../contents/ui/providers/CompanionProvider.qml
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Unknown Device"
+msgstr "Ismeretlen eszköz"
+
+#: ../contents/ui/main.qml
+msgid "Battery"
+msgstr "Akkumulátor"
+
+#. i18n: %1 is the battery label or simply the word, ‘Battery’. %2 is the charge percentage value.
+#. %3 is a Unicode lightning symbol displayed when the device is charging.
+#: ../contents/ui/main.qml
+msgid "%1: %2%%3"
+msgstr "%1: %2%%3"
+
+#: ../contents/ui/main.qml
+msgid "Disconnect"
+msgstr "Leválasztás"
+
+#: ../contents/ui/main.qml
+msgid "Disconnect device"
+msgstr "Eszköz leválasztása"
+
+#: ../contents/ui/main.qml
+msgid "Hide"
+msgstr "Elrejtés"
+
+#: ../contents/ui/main.qml
+msgid "Show"
+msgstr "Megjelenítés"
+
+#: ../contents/ui/main.qml
+msgid "Hide from tray"
+msgstr "Elrejtés a paneltálcáról"
+
+#: ../contents/ui/main.qml
+msgid "Show in tray"
+msgstr "Megjelenítés a paneltálcán"
+
+#: ../contents/ui/main.qml
+msgid "No connected devices with battery info found"
+msgstr ""
+"Jelenleg egy csatlakoztatott eszköz sem közöl akkumulátor-töltöttségi "
+"adatokat"
+
+#: ../contents/ui/providers/CompanionProvider.qml
+msgid "BatteryWatch: Companion service disconnected"
+msgstr "BatteryWatch: Megszakadt a kapcsolat a társszolgáltatással"
+
+#: ../contents/ui/providers/CompanionProvider.qml
+msgid "BatteryWatch: Failed to parse companion data:"
+msgstr "A társadatok feldolgozása meghiúsult:"
+
+#. i18n: %1 is the number of devices found.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Devices found: %1"
+msgstr "%1 eszköz észlelve."
+
+#. i18n: %1 is the error.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Server error: %1"
+msgstr "Kiszolgálóhiba: %1"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Server responded without any battery data!"
+msgstr "A kiszolgáló válasza nem tartalmazott akkumulátor-adatokat!"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Failed to parse battery data:"
+msgstr "Az akkumulátor-adatok feldolgozása meghiúsult:"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid battery data received:"
+msgstr "A fogadott akkumulátor-adatok érvénytelenek:"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid device data for serial:"
+msgstr "A következő szériaszámú eszköz adatai érvénytelenek:"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Error processing battery data:"
+msgstr "Az akkumulátor-adatok feldolgozása meghiúsult:"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid battery device data, skipping"
+msgstr "Az eszköz akkumulátor-adatai helytelenek. Kihagyás."
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Device '%1' is not connected, removing."
+msgstr "A(z) „%1” eszköz nincs csatlakoztatva. Eltávolítás."
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Processed devices:"
+msgstr "Feldolgozott eszközök:"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid device data received for device creation"
+msgstr ""
+"Az eszköz létrehozása meghiúsult, mivel a fogadott adatok érvénytelenek"
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Invalid battery device data for device creation"
+msgstr ""
+"Az eszköz létrehozása meghiúsult, mivel a fogadott akkumulátor-adatok érvényte"
+"lenek"
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Device '%1' is not connected, skipping."
+msgstr "A(z) „%1” eszköz nincs csatlakoztatva. Kihagyás."
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Fetching device data for serial: %1"
+msgstr "A(z) „%1” szériaszámú eszköz adatainak lekérése."
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Successfully fetched device data for serial: %1"
+msgstr "A(z) „%1” szériaszámú eszköz adatainak lekérése sikeresen megtörtént."
+
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Failed to parse device data:"
+msgstr "Az eszköz adatainak feldolgozása meghiúsult:"
+
+#. i18n: %1 is the serial number of the device.
+#: ../contents/ui/providers/OpenLinkHubProvider.qml
+msgid "Server error fetching device '%1':"
+msgstr "A(z) „%1” eszköz adatainak lekérése közben kiszolgálóhiba történt:"
+
+#. i18n: Used when a device is known by BatteryWatch to be misreported by UPower.
+#. %1 is the device's model name. %2 is the erroneously reported device type (e.g.: ‘mouse’).
+#. %3 is the correct device type.
+#: ../contents/ui/providers/UPowerProvider.qml
+msgid "BatteryWatch: Applying UPower device override for '%1': %2 -> %3"
+msgstr "BatteryWatch: UPower-eszköz felülírása. „%1”: %2 -> %3"
