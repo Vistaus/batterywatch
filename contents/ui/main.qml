@@ -129,6 +129,7 @@ PlasmoidItem {
 
 	preferredRepresentation: compactRepresentation
 
+	// i18n: %1 is the version number.
 	toolTipMainText: i18n("BatteryWatch v%1", Plasmoid.metaData.version)
 	toolTipSubText: {
 		if (allDevices.length === 0) {
@@ -147,9 +148,16 @@ PlasmoidItem {
 				var parts = []
 				for (var j = 0; j < device.batteries.length; j++) {
 					var bat = device.batteries[j]
+					// i18n: %1 can be the device name or, in the case of multiple batteries, the battery label, 
+					// or simply the word, ‘Battery’. %2 is the charge percentage value.
 					parts.push(i18n("%1: %2%", bat.label || "Battery", bat.percentage))
 				}
-				line = i18n("%1 - %2", line, parts.join(i18n(", ")))
+				// i18n: Used when there are multiple batteries in a device. 
+				// %1 is the device name. 
+				// %2 is the delimited list of the device's batteries and their charge percentages.
+				line = i18n("%1 - %2", line,
+					// i18n: The delimiter when listing multiple batteries in the same device.
+					parts.join(i18n(", ")))
 			} else {
 				line = i18n("%1: %2%", line, device.percentage)
 			}
@@ -278,6 +286,7 @@ PlasmoidItem {
 					}
 
 					PlasmaComponents.Label {
+						// i18n: %1 is the charge percentage value.
 						text: i18n("%1%", modelData.percentage)
 						font.pixelSize: Kirigami.Theme.smallFont.pixelSize
 					}
@@ -413,6 +422,8 @@ PlasmoidItem {
 														var bat = modelData
 														var label = bat.label || i18n("Battery")
 														var charging = bat.charging ? " ⚡" : ""
+														// i18n: %1 is the battery label or simply the word, ‘Battery’. %2 is the charge percentage value. 
+														// %3 is a Unicode lightning symbol displayed when the device is charging.
 														return i18n("%1: %2%%3", label, bat.percentage, charging)
 													}
 													font.pixelSize: Kirigami.Theme.smallFont.pixelSize
